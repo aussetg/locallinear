@@ -1,0 +1,126 @@
+\RequirePackage{luatex85}
+\documentclass[twoside]{article}
+\special{papersize = 8.5in, 11in}
+\setlength{\pdfpageheight}{11in}
+\setlength{\pdfpagewidth}{8.5in}
+\usepackage[accepted]{aistats2021}
+\usepackage[natbib=true,
+style=authoryear-comp,
+hyperref=true,
+backend=biber,
+maxbibnames=9,
+giveninits=true,
+uniquename=init,
+maxcitenames=2,
+parentracker=true,
+url=false,
+doi=false,
+isbn=false,
+eprint=false,
+backref=true]{biblatex}
+\usepackage{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{dsfont}
+\usepackage{empheq}
+\usepackage[protrusion=true,final]{microtype}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{blkarray}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{makecell}
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+\definecolor{mydarkgreen}{RGB}{39,130,67}
+\newcommand{\green}{\color{mydarkgreen}}
+\definecolor{mydarkred}{RGB}{192,47,25}
+\newcommand{\red}{\color{mydarkred}}
+\usepackage[colorlinks=true,
+    linkcolor=mydarkblue,
+    citecolor=mydarkblue,
+    filecolor=mydarkblue,
+    urlcolor=mydarkblue,
+    pdfview=FitH]{hyperref}
+
+\bibliography{biblio.bib}
+
+\newcommand\bovermat[2]{%
+    \makebox[0pt][l]{$\smash{\overbrace{\phantom{%
+                    \begin{matrix}#2\end{matrix}}}^{\text{#1}}}$}#2}
+
+
+\newcommand\aseq{\mathrel{\stackrel{\makebox[0pt]{\mbox{\normalfont\tiny a.s}}}{=}}}
+
+\captionsetup{justification=centering}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\tr}{Trace}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\diam}{diam}
+                        
+\newcommand{\argmin}{\operatornamewithlimits{\arg\min}}
+\newcommand{\argmax}{\operatornamewithlimits{\arg\max}}
+\newcommand{\diff}{\mathrm{d}}
+
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+\newcommand{\infdiv}{D_\mathit{KL}\infdivx}
+
+\newcommand{\BlackBox}{\rule{1.5ex}{1.5ex}}  %
+\newenvironment{proof}{\par\noindent{\bf Proof\ }}{\hfill\BlackBox}
+\newtheorem{example}{Example} 
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma} 
+\newtheorem{proposition}[theorem]{Proposition} 
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}{Assumption}
+
+\pgfplotsset{compat=1.17}
+
+\captionsetup[table]{skip=10pt}
+
+\begin{document}
+
+\runningtitle{Nearest Neighbour Based Estimates of Gradient}
+\runningauthor{Guillaume Ausset, Stephan Cl\'emen\c{c}on, Fran\c{c}ois Portier}
+
+\twocolumn[
+\aistatstitle{Nearest Neighbour Based Estimates of Gradients:\\ Sharp Nonasymptotic Bounds and Applications}
+\aistatsauthor{Guillaume Ausset\textsuperscript{\textdagger\textdaggerdbl}  
+\And
+Stephan Cl\'emen\c{c}on\textsuperscript{\textdagger} \\ \texttt{\{guillaume.ausset, stephan.clemencon, francois.portier\}@telecom-paris.fr}  
+\And
+Fran\c{c}ois Portier\textsuperscript{\textdagger} }
+\aistatsaddress{ LTCI\textsuperscript{\textdagger}, T\'el\'ecom Paris\textsuperscript{\textdagger}, Institut Polytechnique de Paris \textsuperscript{\textdagger}, BNP Paribas\textsuperscript{\textdaggerdbl}}
+]
+
+\begin{abstract} Motivated by a wide variety of applications, ranging from stochastic optimization to dimension reduction through variable selection, the problem of estimating gradients accurately is of crucial importance in statistics and learning theory. We consider here the classical regression setup, where a real valued square integrable r.v. $Y$ is to be predicted upon observing a (possibly high dimensional) random vector $X$ by means of a predictive function $f(X)$ as accurately as possible in the mean-squared sense and study a nearest-neighbour-based pointwise estimate of the gradient of the optimal predictive function, the regression function $m(x)=\mathbb{E}[Y\mid X=x]$. Under classical smoothness conditions combined with the assumption that the tails of $Y-m(X)$ are sub-Gaussian, we prove nonasymptotic bounds improving upon those obtained for alternative estimation methods. Beyond the novel theoretical results established, several illustrative numerical experiments have been carried out. The latter provide strong empirical evidence that the estimation method proposed here performs very well for various statistical problems involving gradient estimation, namely dimensionality reduction, stochastic gradient descent optimization and disentanglement quantification.
+\end{abstract}
+
+\input{intro.tex}
+\input{background.tex}
+\input{results.tex}
+\input{experiments.tex}
+\input{conclusion}
+
+\printbibliography
+
+\onecolumn
+\input{proofs.tex}
+\end{document}

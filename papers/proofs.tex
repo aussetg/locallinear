@@ -1,0 +1,458 @@
+\section*{SUPPLEMENTARY MATERIAL - TECHNICAL PROOFS}
+
+
+
+
+
+
+
+\subsection*{Auxiliary Results}
+As a first go, we recall or prove various auxiliary results that are involved in the proof of Theorem~\ref{th:gradient_ell2}, and in that of Theorem~\ref{theorem:loco} as well.
+\medskip
+
+The following inequality follows from the well-known Chernoff bound, see \textit{e.g.} \citep{boucheronConcentrationInequalitiesNonasymptotic2013}.
+
+\begin{lemma}\label{lemma=chernoff}
+Let $(Z_i)_{i\geq 1}$ be a sequence of i.i.d. random variables valued in $\{0,1\}$. Set $\mu =  n \mathbb E [Z_1]$ and $S = \sum_{i=1} ^n Z_i $.   For any $\delta \in (0,1)$ and all $n\geq 1$, we have with probability $1-\delta$:
+\begin{align*}
+S \geq \left(1- \sqrt{ \frac{2 \log(1/\delta)  }{  \mu} } \right) \mu  .
+\end{align*}
+ In addition, for any $\delta \in (0,1)$ and $n\geq 1$, we have with probability $1-\delta$:
+\begin{align*}
+S \leq \left(1 +  \sqrt{ \frac{3 \log(1/\delta)   }{  \mu} }  \right) \mu  .
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+Using the Chernoff lower tail \citep{boucheronConcentrationInequalitiesNonasymptotic2013}, for any $t > 0 $ and $n\geq 1$, it holds that
+\begin{align*}
+\mathbb P \left( S < (1-t ) \mu \right) \leq \left( \frac{\exp(-t) }{ (1- t) ^{1-t} }  \right)^\mu.
+\end{align*}
+Because for any $t\in (0,1)$, ${\exp(-t) } / { (1- t) ^{1-t} } \leq  \exp( - {t^2  }/{2} ) $, we obtain that for any $t > 0 $ and $n\geq 1$,
+\begin{align*}
+\mathbb P \left( S < (1-t ) \mu \right) \leq \exp\left( - \frac{t^2 \mu }{2} \right) ,
+\end{align*}
+the bound being obvious when $t\geq 1$. In the previous bound ,choose $t = \sqrt{ {2 \log(1/\delta)  } /{  \mu}}$ to get the stated inequality. The second inequality is obtained by inverting the Chernoff upper tail:
+\begin{align*}
+\mathbb P \left( S > (1+t ) \mu \right) \leq \left( \frac{\exp(t) }{ (1+ t) ^{1+ t} }  \right)^\mu.
+\end{align*}
+\end{proof}
+
+The following inequality is a well-known concentration inequality for sub-Gaussian random variables, see \textit{e.g.} \citep{boucheronConcentrationInequalitiesNonasymptotic2013}.
+
+\begin{lemma}\label{lemma:SG}
+Suppose that $Z$ is sub-Gaussian with parameter $s^2>0$, i.e. $Z$ is real-valued, centred and for all $\lambda>0$, $\mathbb E [ \exp(\lambda Z)  ] \leq \mathbb E [ \exp( \lambda^2 s^2 / 2)]$, then with probability $1-\delta$,
+\begin{align*}
+|Z|  \leq \sqrt {  2s ^2 \log( 2 / \delta) } .  
+\end{align*} 
+\end{lemma}
+
+We shall also need a concentration inequality tailored to Vapnik-Chervonenkis (VC) classes of functions. The result stated in Lemma \ref{vc_bound} below is mainly a consequence of the work in \cite{gineConsistencyKernelDensity2001}. Our formulation is slightly different, the role played by the VC constants ($v$ and $A$ below) being clearly quantified. 
+
+Let $\mathcal F$ be a bounded class of measurable functions defined on $\mathcal X$. Let $U$ be a uniform bound for the class $\mathcal F$, i.e. $|f(x)| \leq U$ for all $f\in \mathcal F$ and $x\in \mathcal X$. The class $\mathcal F$ is called VC with parameters $(v ,A)$ and uniform bound $U$ if
+\begin{align*}
+\sup_Q\mathcal N  \left( \epsilon U , \mathcal F , L_2 (Q)  \right)\leq  \left( \frac A \epsilon \right)  ^{v }  ,
+\end{align*}
+where $\mathcal N (.,\mathcal{F},L_2(Q))$ denotes the covering numbers of the class $\mathcal{F}$ relative to $L_2(Q)$, see \textit{e.g.} \citep{vandervaartWeakConvergenceEmpirical1996a}.  For notational simplicity and with no loss of generality, we require in the definition of a VC class that $A\geq 3\sqrt e$ and $v\geq 1$. Define 
+ $\sigma^2 \geq \sup_{f\in \mathcal F} \Var(f (X_1) )$. We shall work with the condition
+\begin{align}
+\label{eq:constant_n_delta_1}  &\sqrt n \sigma \geq c_1  \sqrt {U^2 v\log(AU / (\sigma \delta)) },
+\end{align} 
+where the constant $c_1$ and $c_2$ are specified in the following statement.
+\begin{lemma}\label{vc_bound}
+Let $\mathcal F$ be a VC class of functions with parameters $(v,A)$ and uniform bound $U>0$ such that $\sigma \leq U$.  Let $n\geq 1$ and $\delta\in (0,1) $. There are two positive universal constants $c_1$ and $c_2$ such that, under condition \eqref{eq:constant_n_delta_1}, we have with probability $1-\delta$,
+\begin{align*}
+&  \sup_{f\in \mathcal F} \left| \sum_{i=1} ^n \{ f(X_i) - \mathbb E f(X_1) \}\right|   \leq c_2 \sqrt { n\sigma^2 v \log( A U / (\sigma \delta) ) }   .
+  \end{align*} 
+\end{lemma}
+
+\begin{proof}
+Set $\Lambda = v\log(AU / \sigma )$. Using \cite[equation (2.5) and (2.6)]{gineConsistencyKernelDensity2001}, we get
+\begin{align*}
+\mathbb E\left [\sup_{f\in \mathcal F} \left| \sum_{i=1} ^n \{ f(X_i) - \mathbb E f(X_1) \}\right|\right] \leq  C\sqrt{\Lambda}\left( \sqrt n\sigma + U\sqrt{\Lambda}    \right) \leq 2 C \sqrt { n\sigma^2 \Lambda} , &\\
+\mathbb E\left [\sup_{f\in \mathcal F} \left| \sum_{i=1} ^n \{ f(X_i) - \mathbb E f(X_1) \}^2\right|\right] \leq  \left( \sqrt n \sigma  +   KU  \sqrt {  \Lambda} \right)^2 \leq 4  n \sigma^2 := V&,
+\end{align*}
+where $C>0$ and $K>0$ are two universal constants. Both previous inequalities are obtained by taking $c_1$ large enough. Let
+\begin{align*}
+&Z = \sup_{f\in \mathcal F} \left| \sum_{i=1} ^n \{ f(X_i) - \mathbb E f(X_1) \}\right|
+\end{align*}
+We recall Talagrand's inequality \citep[Theorem 1.4]{talagrandNewConcentrationInequalities1996} (or \cite[equation (2.7)]{gineConsistencyKernelDensity2001}), for all $t>0$,
+\begin{align*}
+\mathbb P \left(| Z - \mathbb E Z | >t  \right )\leq K' \exp\left( - \frac{t}{2K'U} \log( 1+ 2tU / V)   \right),
+\end{align*}
+where $K'>1$ is a universal constant. Using the fact that for all $t\geq 0$, $  t / (2+2t/3) \leq \log( 1+ t )$, we get
+\begin{align*}
+\mathbb P \left(| Z - \mathbb E Z | >t  \right )\leq K' \exp\left( -  \frac{t^2  }{2K'(V+ 2tU / 3) }   \right).
+\end{align*}
+Inverting the bound, we find that for any $\delta\in (0,1)$, with probability $1-\delta$,
+\begin{align*}
+ | Z - \mathbb E Z | &\leq  \sqrt{ 2 K' V \log( K' / \delta)}  +  (4 K' U / 3) \log( K' / \delta) \\
+ &\leq   \sqrt{ 2 K' V K''  \log( 2 / \delta)}  +  (4 K' U / 3)K'' \log( 2 / \delta)
+  \end{align*} 
+for some $K''>0$. Taking $c_1$ large enough and using that $AU/\sigma >2$, we ensure that $ 2V = 8 n \sigma^2 \geq (4U / 3)^2 K' K''\log(2 / \delta) $. Then using the previous bound on the expectation, it follows that with probability $1-\delta$,
+\begin{align*}
+ | Z|  & \leq  2 C \sqrt { n\sigma^2 \Lambda} + 2 \sqrt{ 8   n \sigma^2 K'K'' \log( 2 / \delta)}  \\
+ & = 2C  \sqrt { n\sigma^2}    \left( \sqrt \Lambda + \sqrt{  8 K' K''  \log( 2 / \delta)) } \right).
+\end{align*} 
+We then conclude by using the bound$ \sqrt a + \sqrt b \leq \sqrt 2 \sqrt {a+b} $.
+\end{proof}
+
+\subsection*{Intermediary Results}
+We now prove some intermediary results used in the core of the proof of the main results.
+
+Define
+\begin{align*}
+\overline{\tau}_{k}  = \left(\frac{ 2  k }{ n b_fV_D}  \right)^{1/ D}.
+\end{align*}
+
+\begin{proposition}\label{prop:tau}
+Suppose that Assumption \ref{cond:density} is fulfilled and that $\overline \tau_{k} \leq \tau_0$. Then for any $\delta \in (0,1)$ such that  $ k\geq 4   \log(n/\delta)   $, we have with probability $1-\delta$:
+\begin{align*}
+ \hat \tau_k(x)   \leq \overline \tau _k .
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+ Using Assumption \ref{cond:density} yields
+\begin{align*}
+\mathbb P (X\in \mathcal{B} (x, \overline \tau_{k} ) )  =   \int_{\mathcal{B} (x, \overline \tau_{k}  )} f_X  \geq b_f \int _{\mathcal{B} (x, \overline \tau_{k}  ) } d\lambda = b_fV_{D} \overline \tau_{k} ^{  D}  = 2k/n.
+\end{align*}
+Consider the set formed by the $n$ balls $ \mathcal{B} (x, \overline \tau_{k}   ) $, $  1\leq k\leq n $. From Lemma \ref{lemma=chernoff} with $Z_i = \mathds 1 _{ \mathcal{B} (x, \overline \tau_{k}  )} (X_i )$, $\mu \geq 2k$, and the union bound, we obtain that for all $\delta\in (0,1)$ and any $k= 1,\ldots, n$:
+\begin{align*}
+\sum_{i=1} ^n \mathds 1 _{ \mathcal{B} (x, \overline \tau_{k}  ) } (X_i ) &\geq \left(1- \sqrt{ \frac{2 \log(n/\delta)  }{ 2k} } \right) 2k  .
+\end{align*}
+As $ k\geq 4   \log(n/\delta)  $, it follows that
+\begin{align*}
+\sum_{i=1} ^n \mathds 1 _{ \mathcal{B} (x, \overline \tau_{k}  ) } (X_i ) & \geq k - (  \sqrt{ 4 k  \log(n/\delta)} -  k)\geq k.
+\end{align*}
+Hence $ \mathbb P_n ( \mathcal{B} (x, \overline \tau_{k} ) ) \geq k / n $, denoting by $\mathbb P_n $ the empirical distribution of the $X_i$'s. By definition of $\hat \tau _{k}(x)$ it holds that  $\hat \tau _{k}(x) \leq  \overline \tau _{k}(x)$.
+\end{proof}
+
+Define
+\begin{align*}
+\underline \tau_{k} = \left (\frac{   k  }{ 2n U_f V_D}  \right)^{1/ D}.
+\end{align*}
+
+\begin{proposition}\label{prop:tau2}
+Suppose that Assumption \ref{cond:density} is fulfilled and that $\underline \tau_{k}  \leq \tau_0$. Then for any $\delta \in (0,1)$ such that  $ k\geq 4   \log(n/\delta)   $, we have with probability $1-\delta$:
+\begin{align*}
+ \hat \tau_k  \geq \underline \tau_{k}  .
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+ Using Assumption \ref{cond:density} yields
+\begin{align*}
+\mathbb P (X\in \mathcal{B} (x, \underline \tau_{k}  ) )  =   \int_{\mathcal{B} (x, \underline  \tau_{k}  )} f_X  \leq U_f \int _{\mathcal{B} (x, \underline  \tau_{k}  ) } d\lambda = U_fV_{D}  \underline  \tau_{k} ^{D}  = k/(2n).
+\end{align*}
+Consider the set formed by the $n$ balls $ \mathcal{B} (x, \underline  \tau_{k} ) $, $  1\leq k\leq n $. From Lemma \ref{lemma=chernoff} with $Z_i = \mathds 1 _{ \mathcal{B} (x, \underline  \tau_{k}  )} (X_i )$, $\mu \leq k/2$, and the union bound, we obtain that for all $\delta\in (0,1)$ and $k= 1,\ldots, n$
+\begin{align*}
+\sum_{i=1} ^n \mathds 1 _{ \mathcal{B} (x,  \underline  \tau_{k}  ) } (X_i ) &\leq \left(1+ \sqrt{ \frac{6 \log(n/\delta)  }{ k} } \right) k/2  .
+\end{align*}
+Using that $ k\geq 6   \log(n/\delta)  $, it follows that
+\begin{align*}
+\sum_{i=1} ^n \mathds 1 _{ \mathcal{B} (x,  \underline  \tau_{k}  ) } (X_i ) & \leq k +  (  \sqrt{ (6/4) k  \log(n/\delta)} - k/2)\leq k.
+\end{align*}
+Hence $ \mathbb P_n ( \mathcal{B} (x, \underline  \tau_{k}  ) ) \leq k / n $. By definition of $\hat \tau _{n}(k)(x)$ it holds that  $\underline  \tau _{k}  \leq     \hat \tau _{k} (x)$.
+\end{proof}
+
+\begin{proposition}\label{prop:var1}
+    Suppose that Assumption \ref{cond:sub_gaussian_inovation} is fulfilled. Then for any $\delta \in (0,1)$, we have with probability $1-\delta$:
+    \begin{align*}
+        \left| \sum_{i=1} ^n \xi_i \mathds 1 _{ \mathcal{B} (x, \hat \tau_{k} (x) ) } (X_i ) \right|  \leq \sqrt{2 k   \sigma^2 \log(2/\delta)} .
+    \end{align*}
+\end{proposition}
+\begin{proof}
+ Set $w_i = \mathds 1 _{ \mathcal{B} (x, \hat  \tau_{k} (x) ) } (X_i )$. Note that $\sum_{i=1} ^n w_i^2 = k$ almost surely. The result follows from the application of Lemma \ref{lemma:SG} to the random variable $ \sum_{i=1} ^n \xi_i w_i$, which is sub-Gaussian with parameter $k \sigma^2$. To check this, it is enough to write
+    \begin{align*}
+        \mathbb E\left[\exp\left( \lambda  \sum_{i=1} ^n \xi_i w_i \right)\right] &=\mathbb E\left[\mathbb E \left[ \exp\left( \lambda  \sum_{i=1} ^n \xi_i w_i \right)\mid X_1,\ldots X_n\right]\right]\\
+        &=\mathbb E\left[ \prod_{i=1} ^n \mathbb E \left[ \exp\left( \lambda \xi_i w_i\right)\mid X_1,\ldots X_n\right]\right]\\
+        & \leq \mathbb E\left[ \prod_{i=1} ^n \mathbb E \left[ \exp\left( \lambda^2  \sigma^2 w_i^2 /2 \right)\mid X_1,\ldots X_n\right]\right]\\
+        &= \mathbb E\left[   \exp\left( \lambda^2  \sigma^2 \sum_{i=1} ^n w_i^2 /2 \right) \right]=   \exp\left( \lambda^2  \sigma^2 k /2 \right) .
+    \end{align*}
+\end{proof}
+
+\begin{proposition}\label{prop:var2}
+    Suppose that Assumption \ref{cond:density}  and \ref{cond:sub_gaussian_inovation} are fulfilled and that $\overline \tau_{k} \leq \tau_0$. Let $\hat h_i:= h_i(X_1,\ldots,X_n) $ such that $a_k = \sup_{i:X_i\in \mathcal B (x, \overline \tau_k) } |\hat h_i |$. Then for any $\delta \in (0,1)$ such that $ k\geq 4 \log(2n/\delta)   $, we have with probability $1-\delta$: 
+        \begin{align*}
+        \left| \sum_{i=1} ^n \xi_i \hat h_i \mathds 1 _{ \mathcal{B} (x, \hat \tau_{k} (x) ) } (X_i ) \right|  \leq \sqrt{2 k\sigma^2 a_k^2  \log(4/\delta)} .
+    \end{align*}
+\end{proposition}
+
+\begin{proof}
+ Set $w_i = \mathds 1 _{ \mathcal{B} (x, \hat  \tau_{k} (x) ) } (X_i )$. Note that $\sum_{i=1} ^n w_i^2 = k$ almost surely. The result follows from the fact that conditioned upon $X_1,\ldots, X_n$, the random variable $ \sum_{i=1} ^n \xi_i h_i w_i$ is sub-Gaussian with parameter $\sigma^2 k \hat a_k^2 $ with $\hat a_k = \sup_{i:X_i\in \mathcal B (x, \overline \tau_k ) } | \hat h_i|$. To check this, it suffices to write
+     \begin{align*}
+       \mathbb E \left[ \exp\left( \lambda  \sum_{i=1} ^n \xi_i \hat h_i  w_i \right)\mid X_1,\ldots X_n\right]       &=\  \prod_{i=1} ^n \mathbb E \left[ \exp\left( \lambda \xi_i \hat h_i  w_i\right)\mid X_1,\ldots X_n\right]\\
+        & \leq  \prod_{i=1} ^n   \exp\left(   \lambda^2  \sigma^2 \hat h_i^2 w_i^2 /2 \right) \\
+        &=   \exp\left( \lambda^2  \sigma^2 \sum_{i=1} ^n \hat h_i^2 w_i /2 \right)  \leq \exp\left(  \lambda^2  \sigma^2 k \hat a_k^2 /2 \right).
+    \end{align*}
+Then, for any $t>0$,
+\begin{align*}
+\mathbb P \left( \left| \sum_{i=1} ^n \xi_i h_i w_i  \right| > t  \right) &\leq \mathbb P \left( \left| \sum_{i=1} ^n \xi_i h_i w_i  \right| > t  ,\, \hat \tau_k(x)  \leq \tau _k (x)\right) + \mathbb P ( \hat \tau_k(x)  \leq \tau _k (x) ) \\
+&\leq  \mathbb E \left[   \mathbb P \left(   \left| \sum_{i=1} ^n \xi_i h_i w_i  \right| > t\mid X_1,\ldots, X_n  \right)  \mathds{1}_{\{ \hat \tau_k(x)  \leq \tau _k (x)\}} \right] + \mathbb P ( \hat \tau_k(x)  \leq \tau _k (x) ) \\
+&\leq \mathbb E \left[   2\exp( -t^2 / (2k \sigma^2  \hat a_k^2 ) )  \mathds{1}_{\{ \hat \tau_k(x)  \leq \tau _k (x)\}} \right] + \mathbb P ( \hat \tau_k(x)  \leq \tau _k (x) )\\
+&\leq      2\exp( -t^2 / (2k \sigma^2   a_k^2 ) )  + \mathbb P ( \hat \tau_k(x)  \leq \tau _k (x) )
+\end{align*}
+We obtain the result by choosing $t = \sqrt { 2k \sigma^2   a_k^2  \log( 4 / \delta )} $ and applying Proposition \ref{prop:tau} (to obtain that $\mathbb P ( \hat \tau_k(x)  \leq \tau _k (x) )\leq \delta/2$).
+\end{proof}
+
+\begin{proposition}\label{prop:cov_bound}
+Suppose that Assumption \ref{cond:density} and \ref{cond:lip3} is fulfilled. Let $\tau >0$, $n\geq 1$, and $\delta\in (0,1)$ such that $ \tau \leq \tau_ 0 $ and   $24 n U_f (2\tau ) ^{D}  \geq   \log(2D^2 /\delta )  $, then with probability $1-\delta$,
+\begin{align*}
+\max_{1\leq j ,j'\leq D}\left| \sum_{i=1} ^n \left\{  (X_{i,j} - x )(X_{i,j'} - x )^T \mathds{1} _{\mathcal B ( x , \tau) }  (X_i)  -   \mathbb E [  (X_{1,j} - x )(X_{1,j'} - x )^T \mathds{1} _{\mathcal B ( x , \tau) }  (X_1) ] \right\}  \right|& \\
+\leq  (2\tau ) ^{2 } \sqrt {  \frac{2 U_f n  (2\tau ) ^{D  }}{3}   \log(2D^2/\delta) } .& 
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+We use Bernstein’s inequality: for any collection $(Z_1,\ldots, Z_n)$ of independent zero-mean random variables such that for all $i=1,\ldots, n$, $|Z_i| \leq m$ and $\mathbb E Z_i^2 \leq v $, it holds that with probability $1-\delta$,
+\begin{align*}
+\left| \sum_{i=1} ^n  Z_i  \right| \leq  \sqrt {2 n v\log(2/\delta) } + (m/3) \log(2/\delta) .
+\end{align*}  
+Applying this with 
+\begin{align*}
+&W_ i  =  \frac{(X_{i,j} -x) }{2\tau}  \frac{(X_{i,j'} -x)}{2\tau} \mathds{1} _{\mathcal B (0,\tau) }  (X_i) , \\
+&Z_i = W_i - \mathbb E [W_i],
+\end{align*}
+we can use
+\begin{align*}
+|Z_i| \leq 2| W_i| \leq  1/4 = m,
+\end{align*}
+and 
+\begin{align*}
+\mathbb E [ (W_i- \mathbb E W_i  )^2]& \leq \mathbb E [W_i^2]  = \mathbb E \left[  \left| \frac{(X_{i,j} -x)}{2\tau} \frac{(X_{i,j'} -x)}{2\tau} \right|^2 \mathds{1} _{\mathcal B (0,\tau) }(X_i) \right]\\
+& = \int   \left|  \frac{(y_{j} -x)}{2\tau} \frac{( y_{j'} -x)}{2\tau} \right|^2 \mathds{1} _{\mathcal B (0,\tau) }(y)  f( y ) dy \\
+& \leq  U_f  \int   \left|  \frac{(y_{j} -x)}{2\tau} \frac{( y_{j'} -x)}{2\tau} \right|^2 \mathds{1} _{\mathcal B (0,\tau) }(y)  dy \\
+& = U_f(2\tau ) ^{D}  \int   \left| u_j  u_{j'}  \right|^2 \mathds{1} _{\mathcal B (0,1/2) }(u) du\\
+& \leq U_f(2\tau ) ^{D}  \int    (u_j ^2 +   u_{j'}^2 )/2  \mathds{1} _{\mathcal B (0,1/2) }(u) du\\
+&  =  U_f(2\tau ) ^{D}  \int    u_1 ^2   \mathds{1}_{\mathcal B (0,1/2) }(u) du\\
+& = U_f(2\tau ) ^{D}  \int_{[-1/2,1/2]  }    u_1^2   du_1   =  \frac{ U_f (2\tau ) ^{D}}{12}  = v.
+\end{align*}
+We have shown that, with probability $1-\delta$,
+\begin{align*}
+\left| \sum_{i=1} ^n  Z_i  \right| \leq  \sqrt {  \frac{ nU_f  (2\tau ) ^{D}}{6}  \log(2/\delta) } + (1/12) \log(2/\delta) .
+\end{align*}
+Because $ 24 n U_f (2\tau ) ^{D}  \geq   \log(2/\delta )  $, we obtain that  
+\begin{align*}
+\left| \sum_{i=1} ^n  Z_i  \right| \leq  2 \sqrt {  \frac{ n U_f (2\tau ) ^{D}}{6}  \log(2/\delta) } .
+\end{align*}
+Replacing $\delta$ by $\delta / D^2$ and using the union bound, we get the desired result.
+\end{proof}
+
+An important quantity in the framework we develop is 
+\begin{align*}
+    \sum_{i : X_i \in \mathcal B (x,  \hat \tau_k (x)) } (X_{i,j}-x_j)   ,
+\end{align*}
+for which we provide an upper bound in the following theorem. Note that we improve upon the straightforward bound of $ k \hat \tau_k (x)$ which is unfortunately not enough for the analysis carried out here.
+We shall work with the following assumption 
+\begin{align}\label{eq:cond_for_talagrand}
+& C_1    \log( D n / \delta)  \leq k  \leq  C_2  n ,
+\end{align}
+where the two constants $C_1>0$ and $C_2>0$ are given in the following proposition.
+
+\begin{proposition}\label{prop:key_lemma}
+ Suppose that Assumption \ref{cond:density} and \ref{cond:lip3} are fulfilled. Let $n\geq 1$, $k\geq 1$ and $\delta\in (0,1)$. There exist universal positive constants $C_1$, $C_2$, and $C_3$ such that, under \eqref{eq:cond_for_talagrand}, we have with probability $1-\delta$,
+\begin{align*}
+\max_{j=1,\ldots, D}  \left|   \sum_{i : X_i \in \mathcal B (x,  \hat \tau_k(x) ) } (X_{i,j}-x_j)   \right|\leq     C_3    \left( \overline \tau_k     \sqrt {   k  \log(  n D  /  \delta )  }  +  \frac { L k\overline\tau_k   ^{2}}{ b_f  }   \right).
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+Taking $C_1$ greater than $4$, we ensure that $k\geq 4   \log(2n/\delta)  $. Taking $C_2$ small enough, we guarantee that $ \overline \tau_k \leq \tau_ 0 $.
+From Proposition \ref{prop:tau}, we have that $\hat \tau_ k(x) \leq \overline \tau _k $ is valid with probability $1-\delta/2$.
+
+Let $ \mu(  \tau  ) =  \mathbb E [  (X_{1} - x )  \mathds{1}_{\mathcal B (x,     \tau ) }(X_1)] $.  Consider the following decomposition
+\begin{align*}
+  |  \sum_{i : X_i \in \mathcal B (x,  \hat \tau_k(x) ) } (X_{i,j}-x_j)  |& \leq \left|    \sum_{i = 1 }^n  \{ (X_{i,j}-x_j)\mathds{1}_{\mathcal B (x,     \hat \tau_k  (x) ) }(X_{i,j})  -  \mu_ j (  \hat \tau_k (x) )\}\right| +   n \mu _ j ( \hat \tau_ k(x) )   \\
+  &\leq  \sup_{ 0 < \tau\leq \overline \tau_k } \left|    \sum_{i = 1 }^n  \{ (X_{i,j}-x_j)\mathds{1}_{\mathcal B (x,    \tau   ) }(X_{i,j})  -  \mu_ j (   \tau )\}\right| +  n \mu _ j ( \hat \tau_ k(x) ) .
+\end{align*}
+Notice that
+\begin{align*}
+\mu(  \tau  ) & = \int    ( y -x)   \mathds{1}_{\mathcal B (x,       \tau  ) }(y) f(y)d y=   (2  \tau  ) ^{1+D}  \int_{\mathcal B (0,1/2) } v f(x+\tau v)   dv\\
+&=   (2  \tau  ) ^{1+D}  \int_{\mathcal B (0,1/2) } v (f(x+\tau v) - f(x))   dv.
+\end{align*}
+Hence
+\begin{align*}
+|\mu _ j (  \tau  ) |&\leq \frac L 2    (2  \tau  ) ^{2+D}  \int_{\mathcal B (0,1/2) } v_j    |v|_\infty   dv \leq \frac L 8   (2  \tau  ) ^{2+D} = \frac L 8     (2  \tau  ) ^{2+D}   .
+\end{align*}
+And we find
+\begin{align*}
+\sup_{j=1,\ldots, D} |\mu_j (  \hat \tau_ k)  |  &\leq  \frac L 8     (2  \overline\tau_k  ) ^{2+D}  =   \frac {L k}{ b_f n }        \overline\tau_k   ^{2}.
+\end{align*}
+The class of rectangles $\mathcal R = \{y\mapsto \mathds{1}_{\mathcal B (x ,     \tau    )}(y) \,:\, \tau >0 \}$ cannot shatter $2$ points $x_1$ and $x_2$. Considering the case $\|x_1- x\|_\infty < \| x_2-x \|\infty $, it fails to pick out $x_2$. Hence its VC index is $v = 2$. %
+From Theorem 2.6.4 in \cite{vandervaartWeakConvergenceEmpirical1996a}, we have
+\begin{align*}
+\mathcal N  \left( \epsilon , \mathcal R , L_2 (Q)  \right)\leq Kv (4e) ^v \left( \frac 1 \epsilon \right)  ^{2 (v- 1) }  
+\end{align*}
+for any probability measure $Q$.
+This implies that $ \mathcal N  \left( \epsilon , \mathcal R , L_2 (Q)  \right) \leq   \left(  {A} / { \epsilon} \right)  ^{2 }$,
+where $A$ is a universal constant. As a result, the class 
+\begin{align*}
+\mathcal F_j = \left\{y\mapsto \frac{ (y-x_j )  }{  \overline \tau_k}    \mathds{1}_{\mathcal B (x,     \tau )}(y)  \, : \, \tau \in (0, \overline \tau_k]\right\},
+\end{align*}
+which is uniformly bounded by $1$,  satisfies the exact same bound for its covering number, that is
+\begin{align*}
+\mathcal N  \left( \epsilon , \mathcal F_j , L_2 (Q)  \right) \leq   \left( \frac {A}{ \epsilon} \right)  ^{2 }.
+\end{align*}
+We can therefore apply Lemma \ref{vc_bound} with $v = 2$, $A$ a universal constant, $U=1$ and $\sigma^2 $ defined as
+\begin{align*}
+\Var\left(  \frac{ (X_1-x)_j }{  \overline \tau_k}    \mathds{1}_{\mathcal B (x,     \tau )}(X_1) \right)\leq \mathbb E [  \mathds{1}_{\mathcal B (x,     \tau )} (X_1)] \leq  \mathbb E [  \mathds{1}_{\mathcal B (x,    \overline  \tau_k )}(X_1) ]\leq \frac{2U_f}{b_f} \frac{k}{n}\leq \frac{4k}{n}
+: = \sigma^2 .
+\end{align*} 
+Condition \ref{eq:constant_n_delta_1} is valid under \eqref{eq:cond_for_talagrand} when $C_1$ (resp. $C_2$) is a large (resp. small) enough constant. The fact that $\sigma^2\leq 1$ is provided by  \eqref{eq:cond_for_talagrand} as well. We obtain that
+\begin{align*}
+ \sup_{ 0 < \tau\leq \overline \tau_k } \left|    \sum_{i = 1 }^n  \{ (X_{i,j}-x_j)\mathds{1}_{\mathcal B (x,    \tau   ) } (X_{i,j}) -  \mu_ j (   \tau )\}\right|
+ & \leq \overline \tau_k   C  \sqrt {   k D \log(n   /  \delta )  } ,
+\end{align*}
+where $C$ is a universal constant ($C$ should be large enough to absorb the other constants involved until now). Using the union bound, this bound is extended to a uniform bound over $j\in\{1,\ldots,D\}$. We then obtain the statement of the proposition.
+\end{proof}
+
+\subsection*{Proof of Theorem \ref{theorem:loco}}
+
+We rely on the bias-variance decomposition expressed in \eqref{decomp_bias_var}. On the first hand, we have
+\begin{align*}
+| m _k(x) -  m  (x)| &= \left|\frac{\sum_{i=1} ^ n ( m  (X_i) -   m (x))  \mathds{1}_{\{  \mathcal{B}(x,\hat \tau_{k}(x)) \} } (X_i)  }{\sum_{i=1} ^ n \mathds{1}_{\{  \mathcal{B}(x, \hat \tau_{k}(x)) \} } (X_i)  } \right| \\
+& \leq \sup_{y\in \mathcal{B}(x, \hat \tau_k(x) ) } |  m (y) -  m (x)|\\
+&\leq  L_1 \hat \tau_{k} (x).
+\end{align*}
+Applying Lemma \ref{prop:tau} we obtain that, with probability $1-\delta/2$,
+\begin{align*}
+| m _k(x) - m (x)|  \leq L_1  \overline \tau_{k} .
+\end{align*}
+On the other hand, we apply Proposition \ref{prop:var1} to get that, with probability $1-\delta/2$,
+\begin{align*}
+|\hat  m _k(x) -  m _k (x)|\leq \sqrt{ \frac{2  \sigma^2 \log(4/\delta)}{k} } .
+\end{align*}
+
+\subsection*{Proof of Theorem \ref{th:gradient_ell2}}
+
+Denote by $\mathbb X$ the design matrix of the (local) regression problem 
+\begin{align*}
+&\mathbb X = ( X_{i_1}^c , \ldots, X_{i_k}^c )^T \\
+&\mathbb Y = (y_{i_1}^c, \ldots , y_{i_k}^c)^T.
+\end{align*}
+ where for any $j=1,\ldots, k$, $i_j$ is such that $X_{i_j}\in \mathcal B(x;\hat \tau_k(x))$. Define  $ w = \mathbb Y- \mathbb X \beta^*$,  $\hat \nu = \hat \beta_k(x) -\beta^*$
+Following \cite{hastieStatisticalLearningSparsity2015}, define
+\begin{align*}
+\mathcal C(S,\alpha) = \{u\in \mathbb R^D \, : \,  \|u_{\overline S}\|_1 \leq \alpha \|u_{S}\|_1\}. 
+\end{align*}
+and let $\hat \gamma_n$ be defined as
+\begin{align*}
+\hat \gamma_n = \inf _ {u\in \mathcal C(S,3)} \frac{ \|   \mathbb X u \|_2^2}{k\|u\|_2^2}  .
+\end{align*}
+Hence,  $\hat \gamma_n $ is the smallest eigenvalue (restricted to the cone) of the design matrix $\mathbb X$. From Lemma 11.1 in \cite{hastieStatisticalLearningSparsity2015}, we have the following:
+whenever
+\begin{align*}
+\lambda \geq (2 / k) \| \mathbb X^T w\|_\infty,
+\end{align*}
+it holds that
+\begin{gather*}
+\hat \nu  \in \mathcal C(S,3),\\
+\| \hat \nu\|_2  \leq \frac{3\sqrt {\#\mathcal S_x}  }{   \hat \gamma_n}  \lambda.
+\end{gather*}
+Consequently, the proof will be completed if,  with probability $1-\delta$,
+\begin{align}
+\label{eq:bound_Xw} \frac{2}{k} \lVert  \mathbb X^T_j w \rVert_\infty &\leq    \overline \tau_k   \left( \sqrt{ \frac{2  \sigma^2   \log(16D/\delta) }{k} } +  L_2 \overline \tau_k  ^2\right),\\
+\label{eq:bound_gamma} \hat \gamma_n  &\geq   \frac { \overline \tau_k  ^{2 }    }{24\times 8  } .
+\end{align}
+
+\paragraph{Proof of \eqref{eq:bound_Xw}.}  In the next few lines, we show that \eqref{eq:bound_Xw} holds with probability $1-\delta/2$. By definition 
+\begin{align*}
+\mathbb X^T w = \sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) }  w_i^c  X_{i}^c =\sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } w_i X_{i} ^c  .
+\end{align*}
+Using that $w_i = \xi_i+ m(X_i) - \beta^{*T} X_i$,
+\begin{align*}
+   \mathbb X^T w  & = \sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } X_{i} ^c \xi_i   +  \sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } X_{i} ^c (m(X_i) - \beta^{*T}X_i)\\
+ &= \sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } X_{i} ^c \xi_i    +\sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } X_{i} ^c (m(X_i) - m(x) - \beta^{*T}(X_i-x) )
+\end{align*}
+where we have used the covariance structure (with empirically centred terms) to derive the last line.
+Note that for any $\tau >0$, $\max_{i : X_i \in \mathcal B (x,  \tau )} |  X_{i,j} ^c| \leq  \tau$.  Hence, from Proposition \ref{prop:var2}, because $\overline \tau_k\leq \tau_0$ and $k\geq 4   \log( 8D n/\delta)$ (taking $C_1$ large enough), we have with probability $1-\delta / (4D)$,
+\begin{align*}
+\left|  \sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } X_{i,j} ^c \xi_i   \right| \leq \sqrt{ 2 k \sigma^2 \overline \tau_k ^2 \log(16D/\delta) }
+\end{align*}
+Moreover,
+\begin{equation*}
+\sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } | X_{i,j} ^c|  | m (X_i) -  m (x) - g(x) ^{T}(X_i-x) | \leq\\
+ k L_2 \hat \tau_k (x) ^2 \max_{i : X_i \in \mathcal B (x, \hat \tau_k(x) )} |  X_{i,j} ^c| \leq k L_2 \hat \tau_k (x) ^3
+\end{equation*}
+Using Proposition \ref{prop:tau}, because $k\geq 4   \log( 4D n/\delta) $, it holds, with probability $1-\delta/(4D)$,
+\begin{align*}
+\sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) } | X_{i,j} ^c|  | m (X_i) -  m (x) - \beta^{*T}(X_i-x) | \leq  k L_2 \overline \tau_k  ^3
+\end{align*}
+We finally obtain that for any $j=1,\ldots, D$, it holds, with probability $1-\delta/(2D)$,
+\begin{align*}
+|   \mathbb X^T_j w | \leq  \sqrt{2 k \sigma^2 \overline \tau_k ^2 \log(16/\delta) } +   k L_2 \overline \tau_k ^3,
+\end{align*}
+and from the union bound, we deduce that, with probability $1-\delta/2$,
+\begin{align*}
+\max_{j=1,\ldots, D} |   \mathbb X^T_j w | \leq  \overline \tau_k   \left( \sqrt{2 k  \sigma^2   \log(16D/\delta) } + kL_2 \overline \tau_k  ^2\right).
+\end{align*}
+
+\paragraph{Proof of \eqref{eq:bound_gamma}.} We show that \eqref{eq:bound_gamma} holds with probability $1-\delta/ 2 $. Define 
+\begin{align*}
+&\hat \Sigma_k =  \sum_{i : X_i \in \mathcal B (x,    \underline \tau_k ) } (X_i-x  )(X_i-x )^T. \\
+&\hat \mu(\tau)  =  \sum_{i : X_i \in \mathcal B (x,    \tau ) } (X_i-x  ).
+\end{align*} 
+First, note that
+\begin{equation*}
+  \mathbb X^T \mathbb X = \sum_{i : X_i \in \mathcal B (x, \hat \tau_k(x)) }      (X_i -x) (X_i -x) ^T - k^{-1}  \hat \mu( \hat \tau_ k )\hat \mu( \hat \tau_ k )^{T}.
+\end{equation*}
+Then, using Proposition \ref{prop:tau2}, because $ k\geq 4   \log( 4n/\delta)  $, with probability $1-\delta/4$, $\hat \tau_k(x)\geq \underline \tau_k$, implying that
+\begin{align*}
+    \mathbb X^T \mathbb X &\geq  \hat \Sigma_k   - k^{-1}  \hat \mu( \hat \tau_ k )\hat \mu( \hat \tau_ k )  ^{ T}   =     \mathbb E [\hat \Sigma_k  ] +  (\hat \Sigma_k  - \mathbb E [\hat \Sigma_k  ] )  - k^{-1}  \hat \mu( \hat \tau_ k )\hat \mu( \hat \tau_ k )  ^{ T} 
+\end{align*} 
+Let $u\in \mathbb R^D$. We have that
+\begin{align*}
+|u^T \hat \mu( \hat \tau_ k ) |^2  &\leq  \|u\|_1^2 \max_{j=1,\ldots, D}  | (\hat \mu( \hat \tau_ k ))_j |^2\leq  \#\mathcal S_x \|u\|_2^2  \max_{j=1,\ldots, D}  | (\hat \mu( \hat \tau_ k ))_j |^2.
+\end{align*}
+Similarly, we have:
+\begin{align*}
+ | u^T (\hat \Sigma_k - \mathbb E \hat \Sigma_k)  u |  &\leq  \|u\|_1^2 \| \hat \Sigma_k - \mathbb E \hat \Sigma_k\|_\infty    \leq   \#\mathcal S_x \|u\|_2^2 \| \hat \Sigma_k - \mathbb E \hat \Sigma_k\|_\infty   .
+\end{align*}
+Using the variable change $y = x+ 2\underline \tau_k v$ and that $ \underline \tau_k    \leq  \tau_0  $, we have that
+\begin{align*}
+\mathbb E \hat \Sigma_k  &= n \mathbb E [  (X_1-x) (X_1-x)^T 1_{ \mathcal B (x, \underline    \tau_k) }(X_1)]  = n\int    ( y -x) ( y -x) ^T 1_{\{y\in \mathcal B (x,    \underline  \tau_k ) \}} f(y)d y\\
+&\geq n   b_f \int    ( y -x) ( y -x) ^T 1_{\{ y\in\mathcal B (x,    \underline  \tau_k ) \}} d y=  n (2\underline \tau_k ) ^{2+D} b_f  \int_{v\in \mathcal B (0,1/2) } vv^T   dv\\
+& =    n(2\underline \tau_k ) ^{2+D} b_f\left(  \int_{  [-1/2,1/2] } v_1^2  dv_1 \right) I_D  \\
+&=  \frac {b_f }{12} n  (2\underline \tau_k ) ^{2+D}    I_D = \frac {b_f }{6 U_f}   \underline \tau_k  ^{2 } k    I_D \geq \frac { \underline \tau_k  ^{2 } k  }{12 }     I_D,
+\end{align*}
+using that $U_f/b_f \leq 2$. Consequently,
+\begin{align*}
+\frac{  \| \mathbb X u\|_2^2 }{\|u\|_2^2}  &\geq \frac { \underline \tau_k  ^{2 } k  }{12 }     -     \#\mathcal S_x \left( \| \hat \Sigma_k - \mathbb E \hat \Sigma_k\|_\infty    + k^{-1} \max_{j=1,\ldots, D}  | (\hat \mu( \hat \tau_ k ))_j |^2\right).
+  \end{align*}
+Proposition \ref{prop:cov_bound} can be applied because $24 nU_f  (2\underline \tau_k ) ^{D} = 12k  \geq   \log(16D^2 /\delta ) $ which is satisfied whenever $C_1$ is large. Combined with Proposition \ref{prop:key_lemma} (our conditions ensure that \eqref{eq:cond_for_talagrand} is satisfied), we obtain that, with probability $1-\delta/4$,
+\begin{align*}
+\frac{\|\mathbb X u \|_2^2 }{\|u\|_2^2}  & \geq \frac { \underline \tau_k  ^{2 } k  }{12 }   -  \#\mathcal S_x \left( 4 \underline \tau_k^2  \sqrt {  \frac{  k }{3}   \log(16 D^2/\delta)  }+
+2C ^2   \left( \overline \tau_k^2    \log(  8 n D  /  \delta )    +  \frac { L^2 k \overline\tau_k   ^{4}}{ b_f^2  }   \right).
+ \right)\\
+&\geq   \frac { \overline \tau_k  ^{2 } k   }{24 \times 8  } \left( 2    - \#\mathcal S_x C _ 3 \left(    \sqrt {  \frac{   \log(nD/\delta)   }{k}  }+
+\frac{   \log(  n  D  /  \delta )} {k}   +  \frac {      \overline\tau_k   ^{2} L ^2}{ b_f^2  }
+ \right) \right )    ,
+\end{align*}
+where $C>0$ is a universal constant. To obtain the last inequality we use $ \overline \tau_k = C_f ^{1/D} \underline \tau_k$ with $C_f\leq 8$,  we choose $C _ 3  >0 $ large enough and $C_2>0 $ small enough. Choose $C_1 $ large enough to get that $ C _ 3  \#\mathcal S_x \sqrt{  \log( n D  /  \delta ) / k }  \leq 1  / 3 $ and $ C _ 3  \# \mathcal S_x   \log(  n  D  /  \delta ) / k   \leq  1 / 3 $. Finally, noting that
+ $  C _ 3  \# \mathcal S_x      \overline\tau_k   ^{2} L ^2  / b_f^2   \leq  1  /3$ we obtain the result.
+
+
+
+
+ \subsection*{Proof of Theorem \ref{theorem:loco}}
+
+We rely on the bias-variance decomposition expressed in \eqref{decomp_bias_var}. On the first hand, we have
+\begin{align*}
+| m _k(x) -  m  (x)| &= \left|\frac{\sum_{i=1} ^ n ( m  (X_i) -   m (x))  \mathds{1}_{\{  \mathcal{B}(x,\hat \tau_{k}(x)) \} } (X_i)  }{\sum_{i=1} ^ n \mathds{1}_{\{  \mathcal{B}(x, \hat \tau_{k}(x)) \} } (X_i)  } \right| \\
+& \leq \sup_{y\in \mathcal{B}(x, \hat \tau_k(x) ) } |  m (y) -  m (x)|\\
+&\leq  L_1 \hat \tau_{k} (x).
+\end{align*}
+Applying Lemma \ref{prop:tau} we obtain that, with probability $1-\delta/2$,
+\begin{align*}
+| m _k(x) - m (x)|  \leq L_1  \overline \tau_{k} .
+\end{align*}
+On the other hand, we apply Proposition \ref{prop:var1} to get that, with probability $1-\delta/2$,
+\begin{align*}
+|\hat  m _k(x) -  m _k (x)|\leq \sqrt{ \frac{2  \sigma^2 \log(4/\delta)}{k} } .
+\end{align*}
+Choose $C_1 $ large enough to get that $ C |\mathcal S_x| \sqrt{  \log( 2  D  /  \delta )}  \leq \sqrt k / 3 $ and $ C|\mathcal S_x|  D \log( 2 n  D  /  \delta )  \leq  k / 3 $. Finally, noting that
+ $  C |\mathcal S_x|     \overline\tau_k   ^{2} L ^2    \leq   b_f^2  /3$ we obtain the result.
+
+
+

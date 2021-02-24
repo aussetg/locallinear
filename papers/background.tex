@@ -1,0 +1,63 @@
+\section{BACKGROUND - FRAMEWORK}\label{sec:background}
+We place ourselves in the nonparametric regression setup described in the previous section. Here and throughout, the indicator function of any event $\mathcal{E}$ is denoted by $\mathds{1}_{\mathcal{E}}$, the cardinality of any finite set $E$ by $\# E$. By $\rVert x\rVert_\infty=\max\{\lvert x_1\rvert,\; \ldots\; \lvert x_D\rvert\}$,  $\rVert x\rVert=\lvert x_1\rvert+\ldots+\lvert x_D\rvert$ and $\rVert x\rVert=\sqrt{ x_1^2+\ldots+\ x_D^2}$ are meant the $\ell_{\infty}$-norm, the $\ell_1$-norm and the $\ell_2$-norm of any vector $x=(x_1,\; \ldots,\; x_D)$ in $\mathbb{R}^D$.  Any vector $x$ in $\mathbb{R}^D$ is identified as a column vector, the transpose of any matrix $M$ is denoted by $M^\intercal$ and $\mathcal{B}(x, \tau)=\{z\in \mathbb{R}^D:\; \rVert x-z\rVert_\infty \leq \tau \}$ is the (closed) ball of centre $x\in \mathbb{R}^D$ and radius $\tau>0$.
+
+\noindent{\bf $k$-NN estimation methods in regression.} Let $x\in \mathbb{R}^D$ be fixed and $k\in\{1,\; \ldots,\; n\}$. Define 
+\begin{align*}
+    \hat \tau_{k} (x) {=} \inf \{\tau\geq 0 \,:\, \sum_{i=1} ^ n  \mathds{1}_{\{X_i \in \mathcal{B}(x,\tau)\}}  \geq  k \},
+\end{align*}
+which quantity is referred to as the $k$-NN radius. Indeed, observe that, equipped with this notation, $\mathcal{B}(x, \hat \tau_{k} (x))$ is the smallest ball with centre $x$ containing $k$ points of the sample $\mathcal{D}_n$ and the mapping $\alpha\in (0,1] \mapsto \hat \tau_{\alpha n} (x)  $ is the empirical quantile function related to the sample $\{\|x-X_1\|_\infty ,\; \ldots,\; \|x-X_n\|_\infty \}$. The rationale behind $k$-NN estimation in the regression context is simplistic, the method consisting in approximating $m(x)=\mathbb{E}[Y\mid X=x]$ by $\mathbb{E}[Y\mid X\in \mathcal{B}(x, \tau)]$, the mapping $m$ being assumed to be smooth at $x$, and computing next the empirical version of the approximant (\textit{i.e.} replacing the unknown distribution $P$ by the raw empirical distribution). This yields the estimator
+\begin{equation}\label{eq:rawNN}
+ \hat m_{k} (x)  = \frac 1 k  \sum_{i : X_i \in \mathcal{B}(x, \hat{\tau}_k(x))}  Y_i     ,
+\end{equation} 
+usually referred to as the standard $k$-nearest neighbour predictor at $x$. Of course, the mapping $x\in \mathbb{R}^D\mapsto \hat m_{k} (x) $ is locally/piecewise constant, just like $x\in \mathbb{R}^D\mapsto \hat{\tau}_{k} (x) $.
+The local average $ \hat m_{k} (x) $ can also be naturally expressed as
+\begin{equation}
+  \hat m_{k}  (x)=   \argmin_{ m  \in \mathbb{R}} \sum_{i : X_i \in \mathcal{B}(x, \hat{\tau}_k(x))} (Y_i - m )^2 .\label{loco}
+\end{equation}
+For this reason, the estimator \eqref{eq:rawNN} is sometimes referred to as the \textit{local constant} estimator in the statistical literature. Following in the footsteps of the approach proposed in \cite{fanDesignadaptiveNonparametricRegression1992}, the estimation of the regression function at $x$ can be refined by approximating the supposedly smooth function $m(z)$ around $x$ in a linear fashion, rather than by a local constant $m$, since we have $m(z) = m(x) + \nabla m(x)^\intercal (z-x) + o(\lVert z-x \rVert)$ by virtue of a first-order Taylor expansion. For any point $X_i $ close to $x$, one may write $m(X_i) \simeq  m + \beta^\intercal (X_i-x)$ and
+the \textit{local linear} estimator of $m(x)$ and the related estimator of the gradient $\beta(x)=\nabla m(x)$ are then defined as
+\begin{align}
+     \argmin_{ (m, \beta) \in \mathbb{R}^{D + 1}} \sum_{i : X_i \in \mathcal{B}(x, \hat{\tau}_k(x))} (Y_i - m - \beta^\intercal (X_i - x))^2 .\label{ll}
+\end{align}
+Because of its reduced bias, the local linear estimator (the first argument of the solution of the optimization problem above) can improve upon the local constant estimator \eqref{eq:rawNN} in moderate dimensions. However, when the dimension $D$ increases, its variance becomes large and the design matrix of the regression problem is likely to have small eigenvalues, causing numerical difficulties.  For this reason, we introduce here a lasso-type regularized version of~\eqref{ll}, namely
+\begin{multline}
+    (\tilde m_{k}   (x) , \tilde \beta_k (x)) \in \\
+    \argmin_{(m, \beta)\in \mathbb{R}^{D+ 1}} \sum_{i : X_i \in \mathcal{B}(x, \hat{\tau}_k(x))} (Y_i - m - \beta^\intercal (X_i - x))^2 \\ 
+    + \lambda \lVert \beta \rVert_1 \label{lll}
+\end{multline}
+for $i \in i(x) = \{j:\;  X_j \in \mathcal{B}(x, \hat{\tau}_k(x)) \}$ and where $\lambda>0$ is a tuning parameter governing the amount of $\ell_1$-complexity penalization.  For the moment, we let it be a free parameter and will propose a specific choice in the next section. Focus is here on the gradient estimator $\tilde \beta_k (x)$, \textit{i.e.} the second argument in~\eqref{lll}. In the subsequent analysis, nonasymptotic bounds are established for specific choices of $\lambda$ and $k$. The following technical assumptions are required.
+
+\noindent {\bf Technical hypotheses.} The hypothesis formulated below permits us to relate the volumes of the balls $\mathcal{B}(x,\; \tau)$ to their probability masses, for $\tau$ small enough. 
+
+\begin{assumption}\label{cond:density}
+There exists $\tau_0>0$ such that restriction of $X$'s distribution on $\mathcal{B}(x, \tau_0)$ has a bounded density $f_X$, bounded away from zero, with respect to Lebesgue measure:
+\begin{align*}
+&b_f = \inf _{y\in B(x, \tau_0)}  f_X (y)>0 \\ 
+&U_f = \sup _{y\in B(x, \tau_0)}  f_X (y)< +\infty.
+\end{align*}
+Suppose in addition that $U_f/ b_f\leq 2$.
+\end{assumption}
+The constant $2$ involved in the condition above for notational simplicity can be naturally replaced by any constant $1+\gamma$, with $\gamma>0$. The next assumption, useful to control the variance term, is classical in regression, it stipulates that we have $Y=m(X)+\varepsilon$, with a sub-Gaussian residual $\varepsilon$ independent from $X$.
+\begin{assumption}\label{cond:sub_gaussian_inovation}
+The zero-mean and square integrable r.v. $\varepsilon = Y-m(X)$ is independent from $X$ and is sub-Gaussian with parameter $\sigma^2>0$, \textit{i.e.} $\forall \lambda\in \mathbb R$, $\mathbb{E} [\exp ( \lambda \varepsilon ) ] \leq \exp( - \sigma^2 \lambda^2/2) $.  
+\end{assumption}
+
+In order to control the bias error when estimating the gradient $\beta(z)=\nabla m(z)$ of the regression function at $x$, smoothness conditions are naturally required.
+
+\begin{assumption}\label{cond:lip2}
+The function $m(z)$ is differentiable on $\mathcal{B}(x, \tau_0)$ with gradient $\beta(z)=\nabla m(z)$ and there exists $L_2>0$ such that for all $z \in \mathcal{B}(x, \tau_0)$,
+\begin{align*}
+|m (z) - m (x) - \beta(x)  (z-x) | \leq  L_2\|z-x\|_\infty ^2 .
+\end{align*}
+\end{assumption}
+
+Finally, a Lipschitz regularity condition is required for the density $f_X$.
+
+\begin{assumption}\label{cond:lip3}
+The function $f_X$ is $L$-Lipschitz at $x$ on $\mathcal{B}(x, \tau_0)$, \textit{i.e.} there exists $L>0$ such that for all $z \in B(x, \tau_0)$,
+\begin{align*}
+|f_X (z) - f_X(x) | \leq  L\|z-x\|_\infty  .
+\end{align*}
+\end{assumption}
+
+We point out that, as the goal of this paper is to give the main ideas underlying the use of the $k$-NN methodology for gradient estimation rather than carrying out a fully general analysis,  the $\ell_\infty$-norm is considered here, making the study of $\ell_1$ regularization easier. The results of this paper can be extended to other norms at the price of additional work.

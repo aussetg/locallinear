@@ -1,0 +1,59 @@
+\section{MAIN RESULT - THE $k$-NN BASED GRADIENT ESTIMATOR}\label{sec:main}
+
+
+
+The main theoretical result of the present paper is now stated and further discussed. Under the hypotheses listed in the previous section and for specific choices of $k$ and $\lambda$, it provides a nonasymptotic bound for the estimator $\tilde{\beta}_k(x)$ of the gradient $\beta(x)=\nabla m(x)$ at $x$ given by \eqref{lll}. Whereas nonasymptotic bounds for $k$-NN estimators of the regression function have been established under various smoothness assumptions (see \textit{e.g.} \cite{jiangNonAsymptoticUniformRates2019} or \cite{kpotufeKNNRegressionAdapts2011}), no nonasymptotic study of $k$-NN based estimator of the gradient of the regression function is documented in the literature. To the best of our knowledge, the result proved in this article is the first of this nature. Two key quantities are involved in the upper confidence bound given in Theorem \ref{th:gradient_ell2}, the (deterministic) radius 
+\begin{align*}
+\overline{\tau} _ k =  \left (\frac{ 2  k }{ n b_f2^D}  \right)^{ 1/ D} ,
+\end{align*}
+that upper bounds the $k$-NN radius on an event holding true with high probability, as well as the cardinality of the so-called local active set
+\begin{align*}
+\mathcal S_x = \{  1\leq k\leq D  \, : \, \beta_ k (x) \neq 0\} ,
+\end{align*}
+which, for clarity reasons, is supposed to be non-empty.
+
+ 
+
+
+\begin{theorem}\label{th:gradient_ell2}
+Suppose that assumptions \ref{cond:density}, \ref{cond:sub_gaussian_inovation}, \ref{cond:lip2} and \ref{cond:lip3} are fulfilled. Let $n\geq 1$ and $k\geq 1$ such that $\overline{\tau} _ k\leq \tau_0$.  Let $\delta\in (0,1)$ and set  $\lambda =  \overline{\tau} _ k  ( \sqrt{ 2   \sigma^2   \log(16D/\delta)/k } + L_2 \overline{\tau} _ k^2 )$. Then, we have with probability larger than $1-\delta$,
+\begin{multline}\label{eq:main_bound}
+\lVert  \tilde{\beta}_k  (x) - \beta(x)  \rVert _ 2\leq \\
+(24)^2  \sqrt{\#\mathcal S_x }    \left(  \overline \tau_k ^{-1} \sqrt{\frac{ 2   \sigma^2   \log(16D/\delta)}{k} } + L_2 \overline \tau_k  \right),
+\end{multline}
+as soon as $C_1  \#\mathcal S_x \log(  D n / \delta)   \leq k  \leq  C_2  n $,   $  \overline\tau_k   ^{2}     \leq  (   b_f^2 /( C_3 \#\mathcal S_x L ^2 )  \wedge \tau_0 ^2 )$, where $C_1$, $C_2$ and $C_3$ are universal constants.
+\end{theorem}
+
+
+
+
+The analysis of the accuracy of the nearest neighbour estimate $\hat m_k(x)$ classically involves the following decomposition of the estimation error
+\begin{equation}\label{decomp_bias_var}
+ \hat {m}_{k} (x)   - m (x) = \left( \hat {m}_{k}(x)  -   m_{k}(x)   \right) + \left(m_{k}(x)   - m(x)\right),
+\end{equation}
+where
+$ m_{k}(x)  = (1/k)  \sum_{i : X_i \in \mathcal{B}(x, \hat{\tau}_k(x))} m(X_i)$. The approach developed in \cite{jiangNonAsymptoticUniformRates2019} essentially consists in combining this decomposition with the fact that $ \hat{\tau}_k(x)\leq \overline \tau _k $ with high probability. By its own nature, our local linear Lasso regularized estimate of the gradient $\tilde \beta_k$ cannot be treated in the same way. First, in order to take advantage of the Lasso regularization in sparse situations  (\textit{i.e.} when the gradient at $x$ depends on a small number of covariates solely), we rely on a basic inequality \cite[Lemma 11.1]{hastieStatisticalLearningSparsity2015} which is useful when analysing standard Lasso estimates. Second, we need to control the size of the neighbourhoods $\hat{\tau}_k(x)$ on an event of high probability. In this respect, we slightly deviate from the approach of~\cite{jiangNonAsymptoticUniformRates2019}: we do not rely on concentration results over VC classes but only on the Chernoff concentration bound. This way, we can relax significantly the lower bound conditions for $k$ as the dimension $D$ increases, see Theorem 2 below, which compares favourably with Corollary 1 in \cite{jiangNonAsymptoticUniformRates2019} for instance.
+
+
+Balancing between the bias and the variance term of the upper bound provided in \eqref{eq:main_bound} we obtain that the optimal value for $k$ is $k\sim n^{4/(4+D)}$. In this case, the bound stated above yields the rate $n^{-1/(4+D)}$. As a consequence, our bound matches the minimax rate (up to log terms) given in \cite{stoneOptimalGlobalRates1982} for the problem of the estimation of the derivative (in a $L_2$ sense).
+\medskip
+
+{\bf Pointwise $k$-NN estimation of $m(x)$.}
+Though it concerns the local estimation error, the bound  in the theorem below can be viewed as a refinement of the nonasymptotic results recently established in \cite{jiangNonAsymptoticUniformRates2019} (see also \cite{kpotufeKNNRegressionAdapts2011}), which provide uniform bounds in $x$. It requires a local smoothness condition for the regression function. From now on, $\| \cdot\|$ denotes any norm on $\mathbb{R}^D$.
+
+\begin{assumption}\label{cond:lip}
+The regression function $m(z)$ is $L_1$-Lipschitz at $x$, \textit{i.e.} there exists $L_1>0$ such that for all $z \in \mathcal{B}(x, \tau_0)=\{x'\in \mathbb{R}^D:\; \| x'-x\| \leq \tau_0  \}$,
+\begin{equation*}
+|m (x) - m (z) | \leq  L_1\|x-z\|  .
+\end{equation*}
+\end{assumption}
+
+\begin{theorem}\label{theorem:loco}
+Suppose that assumptions \ref{cond:density}, \ref{cond:sub_gaussian_inovation} and \ref{cond:lip} are fulfilled and that $2  k  \leq n \tau_0  b_fV_D $. Then for any $\delta \in (0,1)$ such that  $ k\geq 4   \log(2n/\delta)   $, we have with probability $1-\delta$:
+\begin{align*}
+|\hat m_k (x) - m  (x)|  \leq  \sqrt{ \frac{2  \sigma^2 \log(4/\delta)}{k} } + L_1 \left (\frac{ 2  k }{ n b_fV_D}  \right)^{1/ D},
+\end{align*}
+where $V_D= \int \mathds{1}_{\{x\in \mathcal{B}(0,1)\}}dx $ denotes the volume of the unit ball.
+\end{theorem}
+
+We obtain a weaker condition on the value of $k$ than that obtained in \cite{jiangNonAsymptoticUniformRates2019} (see  Corollary 1 therein), due to our different treatment of the approximation term (the second term in decomposition \eqref{decomp_bias_var}) is different (see the argument detailed in the Supplementary Material). With $k\sim n^{2/(2+D)}$, the bound stated above yields the minimax rate $n^{-1/(D+2)}$. 
