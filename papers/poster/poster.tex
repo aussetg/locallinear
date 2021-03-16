@@ -1,0 +1,164 @@
+\documentclass[dvipsnames]{beamer}
+\usepackage[orientation=landscape,scale=1.6]{beamerposter}
+\mode<presentation>{\usetheme{ZH}}
+\usepackage{fontspec}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{dsfont}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage[english]{babel} % required for rendering German special characters
+\usepackage{siunitx} %pretty measurement unit rendering
+\usepackage{ragged2e}
+\usepackage[justification=justified]{caption}
+\usepackage{array,booktabs,tabularx}
+\usepackage{float}
+\usepackage[plain]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\usepackage{qrcode}
+\pgfplotsset{compat=1.17}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+%\setmonofont{Iosevka SS08}
+
+%\makeatletter
+%\algrenewcommand\ALG@beginalgorithmic{\setmainfont{Iosevka SS08}}
+%\makeatother
+
+
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\vect}{\operatorname{vect}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand*\ri{\mathop{}\!\mathrm{ri}}
+\newcommand*\aff{\mathop{}\!\mathrm{aff}}
+\newcommand*\dom{\mathop{}\!\mathrm{dom}}
+\newcommand*\epi{\mathop{}\!\mathrm{epi}}
+\newcommand*\diag{\mathop{}\!\mathrm{diag}}
+\newcommand*\cov{\mathop{}\!\mathrm{cov}}
+\newcommand*\var{\mathop{}\!\mathrm{var}}
+\newcommand*\corr{\mathop{}\!\mathrm{corr}}
+
+\newcolumntype{Z}{>{\centering\arraybackslash}X} % centered tabularx columns
+\sisetup{per=frac,fraction=sfrac}
+
+\title{Nearest Neighbour Based Estimates of Gradients: \\ Sharp Nonasymptotic Bounds and Applications}
+\author{Guillaume Ausset$^{1,2}$, Stéphan Cl\'emen\c{c}on$^{1}$, Fran\c{c}ois Portier$^{1}$}
+\institute{$^{1}$ T\'el\'ecom ParisTech, LTCI, Universit\'e Paris Saclay $^{2}$ BNP Paribas}
+
+% edit this depending on how tall your header is. We should make this scaling automatic :-/
+\newlength{\columnheight}
+\setlength{\columnheight}{103cm}
+
+\begin{document}
+\begin{frame}
+\begin{columns}
+    \begin{column}{.5\textwidth}
+		\begin{beamercolorbox}[center]{postercolumn}
+			\begin{minipage}{.98\textwidth}  % tweaks the width, makes a new \textwidth
+				\parbox[t][\columnheight]{\textwidth}{ % must be some better way to set the the height, width and textwidth simultaneously
+					\begin{myblock}{Local Linear Estimation}
+                        We want to estimate the gradient of a function $f$, whose gradient is supposed sparse. We suppose that we are able to gather evaluations $Y = f(X)$ of the function of interest.\newline
+
+                        \textbf{Local Linear Estimation of the Gradient}\newline
+                        If we locally approximate the function by its Taylor expansion, we can estimate the gradient by solving
+                        \begin{equation*}
+                            (\tilde m_{k}   (x) , \tilde \beta_k (x)) \in
+                            \argmin_{(m, \beta)\in \mathbb{R}^{D+ 1}} \sum_{i : X_i \in \texttt{KNN}(x)} (Y_i - m - \beta^\intercal (X_i - x))^2
+                            + \lambda \lVert \beta \rVert_1 \label{lll}
+                        \end{equation*}
+                        \newline
+                        \begin{theorem}
+                            \newline
+                           Let $n\geq 1$ and $k\geq 1$ such that $\overline{\tau} _ k\leq \tau_0$.  Let $\delta\in (0,1)$ and set  $\lambda =  \overline{\tau} _ k  ( \sqrt{ 2   \sigma^2   \log(16D/\delta)/k } + L_2 \overline{\tau} _ k^2 )$. Then, we have with probability larger than $1-\delta$,
+                            \begin{equation*}
+                            \lVert  \tilde{\beta}_k  (x) - \beta(x)  \rVert _ 2\leq (24)^2  \sqrt{\#\mathcal S_x }    \left(  \overline \tau_k ^{-1} \sqrt{\frac{ 2   \sigma^2   \log(16D/\delta)}{k} } + L_2 \overline \tau_k  \right),
+                            \end{equation*}
+                            as soon as $C_1  \#\mathcal S_x \log(  D n / \delta)   \leq k  \leq  C_2  n $,   $  \overline\tau_k   ^{2}     \leq  (   b_f^2 /( C_3 \#\mathcal S_x L ^2 )  \wedge \tau_0 ^2 )$, where $C_1$, $C_2$ and $C_3$ are universal constants.
+                            \end{theorem}
+                            \newline\newline
+                            Our bounds make use of the \emph{sparsity} of $\nabla f$ and only require a neighbourhood consisting of the $K$ nearest points.\newline\newline
+                            The use of a KNN neighbourhood gives us:
+                            \begin{itemize}
+                                \item Robustness to the data
+                                \item Ease of calibration
+                                \item Possibility to reuse past computations
+                            \end{itemize}
+                    \end{myblock}
+                    \begin{myblock}{Variable Selection}
+                        \begin{algorithm}[H]
+                            \caption{Node Splitting for Gradient Guided Trees}\label{alg:LocalLinearTree}
+                            \begin{algorithmic}[1] %
+                                \Require $(X, Y)$: training set, $\texttt{Node}$: indexes of points in the node
+                                \State{$\nabla m (X_i) \gets \texttt{estimated gradient at } X_i, \, \forall i \in \texttt{Node}$ \texttt{ using }~\eqref{lll}}
+                                \State{$\omega \gets \sum_{i \in \texttt{Node}} \lvert \nabla m(X_i) \rvert$}
+                                \State{$K \gets$ \texttt{sample} $\sqrt{D}$ \texttt{dimensions in} $\{1, \ldots, d\} \texttt{ with probability weights} \propto \omega$}
+                                \State{$k, c \gets \texttt{best threshold } c \texttt{ and dimension } k$}
+                                \State{$\textbf{return } k, c$}
+                            \end{algorithmic}
+                        \end{algorithm}
+                    \end{myblock}\vfill
+            }\end{minipage}\end{beamercolorbox}
+    \end{column}
+    	% Colonne de Droite
+	\begin{column}{.5\textwidth}
+		\begin{beamercolorbox}[center]{postercolumn}
+			\begin{minipage}{.98\textwidth} % tweaks the width, makes a new \textwidth
+				\parbox[t][\columnheight]{\textwidth}{ % must be some better way to set the the height, width and textwidth simultaneously
+                    \begin{myblock}{Variable Selection}
+                        \begin{table}[H]
+                            \centering
+                            \begin{tabular}{lrrrr}
+                                & \multicolumn{2}{c}{Description} & \multicolumn{2}{c}{Loss} \\
+                                \cmidrule(l){2-3} \cmidrule(l){4-5}
+                                Dataset & $n$ & $D$ & RF & GGF \\
+                                \midrule
+                                Wisconsin & $569$ & $30$ & $0.0352$ & $\mathbf{0.0345}$ \\
+                                Heart & $303$ & $13$ & $0.128$ & $\mathbf{0.124}$ \\
+                                Diamonds & $53940$ & $23$ & $680033$ & $\mathbf{664265}$ \\
+                                Gasoline & $60$ & $401$ & $0.678$ & $\mathbf{0.512}$ \\
+                                SDSS & $10000$ & $8$ & $0.872\cdot 10^{-3}$  & $\mathbf{0.776}\cdot 10^{-3}$ \\
+                                \bottomrule
+                            \end{tabular}
+                            \caption{Performance of the two random forest algorithms on a $50$-folds cross validation.}\label{table:results}
+                        \end{table}
+                    \end{myblock}
+					\begin{myblock}{Gradient Free Optimization}
+                        \begin{algorithm}[H]
+                            \caption{Estimated Gradient Descent}\label{alg:lolamin}
+                            \begin{algorithmic}[1] %
+                                \Require $x_0$: initial guess, $f$: function $\mathbb{R}^D \to \mathbb{R}$, $M$: budget
+                                \State{$X \gets X_1, \ldots, X_M \texttt{ with } X_i \sim \mathcal{N}(x_0, \varepsilon \times I_D)$}
+                                \State{$Y \gets f(X) := f(X_1), \ldots, f(X_M)$}
+                                \While{\texttt{not StoppingCondition}}
+                                    \State{$m, \Delta \gets$ \texttt{estimated gradient at} $x$ \texttt{w.r.t} $X, Y$ \texttt{using}~\eqref{lll}}
+                                    \State{$X \gets X, X_1, \ldots, X_M \texttt{ with } X_i \sim \mathcal{N}(\texttt{GradientStep}(x, \Delta), \varepsilon \times I_D)$}
+                                    \State{$Y \gets f(X)$}
+                                    \State{$x \gets \argmin_{X_i} \{ f(X_i) \}$}
+                                \EndWhile
+                                \State{$\textbf{return } x$}
+                            \end{algorithmic}
+                        \end{algorithm}
+                        \begin{figure}[htb]
+                            \centering
+                            \begin{subfigure}[t]{.5\textwidth}
+                                \input{figs/rosenbrock_100.tikz}
+                            \end{subfigure}%
+                            \begin{subfigure}[t]{.5\textwidth}
+                                \input{figs/rosenbrock_100+wang_nesterov.tikz}
+                            \end{subfigure}%
+                            \caption{Gradient Descent on the sparse noisy Rosenbrock function for $d=100$.}\label{fig:rosenbrock_vs}
+                        \end{figure}
+                        \vspace{-2cm}
+                        \raggedleft\qrcode[hyperlink,height=6cm]{https://git.sr.ht/\~aussetg/locallinear}
+                    \end{myblock}
+                    \vfill
+            }\end{minipage}\end{beamercolorbox}
+    \end{column}
+\end{columns}
+\end{frame}
+\end{document}
