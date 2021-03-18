@@ -1,6 +1,6 @@
 \begin{tikzpicture}
-\begin{axis}[ylabel={$\lvert f(x^\star) - f(x) \rvert$},width=24cm,height=15cm, legend style={draw=none}, xtick={0,2500,5000}]
-    \legend{{Estimated $\nabla$},{True $\nabla$},{Nelder-Mead}}
+\begin{axis}[xlabel={\# function evaluations},width=24cm,height=15cm, ylabel={$\lvert f(x^\star) - f(x) \rvert$}, xtick={0,2500,5000}, legend style={draw=none}]
+\legend{{Ours},{True $\nabla$},{Nelder-Mead}}
     \addplot+[no marks]
         table[x expr=\thisrowno{0}*50, row sep={\\}]
         {

@@ -90,6 +90,7 @@
                             \end{itemize}
                     \end{myblock}
                     \begin{myblock}{Variable Selection}
+                        \textbf{Idea:} unimportant variables will have gradients equal to zero on that dimension.
                         \begin{algorithm}[H]
                             \caption{Node Splitting for Gradient Guided Trees}\label{alg:LocalLinearTree}
                             \begin{algorithmic}[1] %
@@ -149,11 +150,11 @@
                                 \input{figs/rosenbrock_100.tikz}
                             \end{subfigure}%
                             \begin{subfigure}[t]{.5\textwidth}
-                                \input{figs/rosenbrock_100+wang_nesterov.tikz}
+                                \input{figs/rosenbrock_100+wang_nesterov_fixed.tikz}
                             \end{subfigure}%
                             \caption{Gradient Descent on the sparse noisy Rosenbrock function for $d=100$.}\label{fig:rosenbrock_vs}
                         \end{figure}
-                        \vspace{-2cm}
+                        \vspace{-3cm}
                         \raggedleft\qrcode[hyperlink,height=6cm]{https://git.sr.ht/\~aussetg/locallinear}
                     \end{myblock}
                     \vfill
